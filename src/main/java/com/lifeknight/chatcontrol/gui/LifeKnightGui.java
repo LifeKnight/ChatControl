@@ -58,12 +58,6 @@ public class LifeKnightGui extends GuiScreen {
         super.drawVerticalLine(Utils.getScaledWidth(300), 0, super.height, 0xffffffff);
         searchField.drawTextBoxAndName();
 
-        for (LifeKnightTextField lifeKnightTextField: textFields) {
-            if (((selectedGroup.equals("All") || selectedGroup.equals(lifeKnightTextField.lifeKnightString.getGroup())) && (searchInput.isEmpty() || lifeKnightTextField.lifeKnightString.getLowerCaseName().contains(searchInput.toLowerCase())))) {
-                lifeKnightTextField.drawTextBoxAndName();
-            }
-        }
-
         for (int i = 0; i < groupNames.size() - 1; i++) {
             drawHorizontalLine(Utils.getScaledWidth(100), Utils.getScaledWidth(200), Utils.getScaledHeight(150) + 25 * i + 22, 0xffffffff);
         }
@@ -106,6 +100,13 @@ public class LifeKnightGui extends GuiScreen {
         } else {
             scrollBar.visible = false;
         }
+
+        for (LifeKnightTextField lifeKnightTextField: textFields) {
+            if (((selectedGroup.equals("All") || selectedGroup.equals(lifeKnightTextField.lifeKnightString.getGroup())) && (searchInput.isEmpty() || lifeKnightTextField.lifeKnightString.getLowerCaseName().contains(searchInput.toLowerCase())))) {
+                lifeKnightTextField.drawTextBoxAndName();
+            }
+        }
+
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
