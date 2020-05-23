@@ -104,7 +104,7 @@ public class ChatControl {
                 return "[z]";
             }
             default: {
-                return "";
+                return "[^a-z]";
             }
         }
     }
