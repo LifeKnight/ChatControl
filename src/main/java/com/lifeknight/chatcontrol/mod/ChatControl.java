@@ -258,7 +258,7 @@ public class ChatControl {
     public static boolean containsAdvertisement(String input) {
         String result = input;
         if (hideAdvertisementMessages.getValue() && hide.getValue()) {
-            String[] advertisements = {"/party join", "/p join", "/guild join", "/g join", "/visit", "/housing "};
+            String[] advertisements = {"/party join", "/p join", "/guild join", "/g join", "/visit", "/housing", "/play"};
             for (String advertisement: advertisements) {
                 result = result.replaceAll("(?i)" + advertisement, ".");
                 if (censorAdvancedSwears.getValue()) {
@@ -309,7 +309,7 @@ public class ChatControl {
                 }
             }
 
-            return (input.contains("joined the lobby!") && hideLobbyJoinMessages.getValue()) || ((input.contains("found a") || input.contains("has found")) && hideLobbyCosmeticMessages.getValue()) || (hideBedWarsShopMessages.getValue() && input.contains("purchased") || shouldHideMessageForUselessness(input));
+            return (input.contains("joined the lobby!") && hideLobbyJoinMessages.getValue()) || ((input.contains("found a") || input.contains("has found")) && hideLobbyCosmeticMessages.getValue()) || (hideBedWarsShopMessages.getValue() && (input.contains("purchased") || input.startsWith("You don't have enough")) || shouldHideMessageForUselessness(input));
         }
         return false;
     }
@@ -352,6 +352,10 @@ public class ChatControl {
         }
 
         if (input.startsWith("Sending you to")) {
+            return true;
+        }
+
+        if (input.startsWith("You gained")) {
             return true;
         }
 

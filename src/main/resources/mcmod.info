@@ -6,11 +6,9 @@
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "",
-    "updateUrl": "",
+    "updateUrl": "https://lifeknightmods.wixsite.com/lifeknight",
     "authorList": ["LifeKnight"],
     "credits": "PlumberKid35 for the name and custom censors idea.",
-    "logoFile": "",
-    "screenshots": [],
-    "dependencies": []
+    "logoFile": "logo.png"
   }
 ]
