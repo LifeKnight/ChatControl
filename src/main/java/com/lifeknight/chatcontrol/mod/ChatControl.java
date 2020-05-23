@@ -359,6 +359,10 @@ public class ChatControl {
             return true;
         }
 
+        if (input.contains("gathered") && input.contains("head")) {
+            return true;
+        }
+
         return input.contains("store.hypixel.net");
     }
 
