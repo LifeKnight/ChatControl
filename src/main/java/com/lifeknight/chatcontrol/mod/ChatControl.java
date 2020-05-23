@@ -39,14 +39,14 @@ public class ChatControl {
                 return "[a|\\d]";
             }
             case 'b': {
-                return "[b]";
+                return "[b|d]";
             }
             case 'c':
             case 'k': {
-                return "[c|k]";
+                return "[c|k|q]";
             }
             case 'd': {
-                return "[d]";
+                return "[d|b]";
             }
             case 'e': {
                 return "[e|\\d]";
@@ -78,7 +78,7 @@ public class ChatControl {
             }
             case 'q':
             case 'p': {
-                return "[p|q]";
+                return "[p|q|9]";
             }
             case 'r': {
                 return "[r]";
@@ -98,7 +98,7 @@ public class ChatControl {
                 return "[x]";
             }
             case 'y': {
-                return "[y]";
+                return "[y|7]";
             }
             case 'z': {
                 return "[z]";
