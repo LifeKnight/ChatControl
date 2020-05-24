@@ -89,13 +89,13 @@ public class ChatControlMod {
 	public static final Config config = new Config();
 
 	@EventHandler
-	void init(FMLInitializationEvent initEvent) {
+	public void init(FMLInitializationEvent initEvent) {
 		MinecraftForge.EVENT_BUS.register(this);
 		ClientCommandHandler.instance.registerCommand(new ChatControlCommand());
 	}
 	
 	@SubscribeEvent
-    void onConnect(final FMLNetworkEvent.ClientConnectedToServerEvent event) {
+    public void onConnect(final FMLNetworkEvent.ClientConnectedToServerEvent event) {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -114,14 +114,14 @@ public class ChatControlMod {
     }
 
     @SubscribeEvent
-	void onChatMessageReceived(ClientChatReceivedEvent event) {
+    public void onChatMessageReceived(ClientChatReceivedEvent event) {
 		if (runMod.getValue() && event.type == 0) {
 			ChatControl.processMessage(event);
 		}
 	}
 
 	@SubscribeEvent
-	void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEvent.ClientTickEvent event) {
 		if (openGui) {
 			Minecraft.getMinecraft().displayGuiScreen(guiToOpen);
 			openGui = false;

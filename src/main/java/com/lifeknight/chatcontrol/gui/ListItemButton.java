@@ -9,6 +9,7 @@ import static com.lifeknight.chatcontrol.utilities.Utils.get2ndPanelCenter;
 
 public abstract class ListItemButton extends GuiButton {
     private final String buttonText;
+    public boolean isSelectedButton = false;
 
     public ListItemButton(int componentId, String element) {
         super(componentId, get2ndPanelCenter() - 100,
@@ -35,7 +36,7 @@ public abstract class ListItemButton extends GuiButton {
         {
             FontRenderer fontrenderer = mc.fontRendererObj;
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + super.width && mouseY < this.yPosition + super.height;
-            int color = ListGui.selectedItem == this ? 0xeaff0000 : 0xffffffff;
+            int color = isSelectedButton ? 0xeaff0000 : 0xffffffff;
             drawEmptyBox(this.xPosition, this.yPosition, this.xPosition + super.width, this.yPosition + super.height, color);
             this.mouseDragged(mc, mouseX, mouseY);
             int j = 14737632;

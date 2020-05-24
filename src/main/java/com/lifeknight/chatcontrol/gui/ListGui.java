@@ -22,7 +22,7 @@ public class ListGui extends GuiScreen {
     private ConfirmButton clearButton;
     private ScrollBar scrollBar;
     private LifeKnightTextField addField, searchField;
-    public static ListItemButton selectedItem;
+    public ListItemButton selectedItem;
     public LifeKnightButton addButton, removeButton;
     private String textFieldSubMessage = "", searchInput = "", listMessage = "";
     public LifeKnightGui lastGui;
@@ -70,7 +70,7 @@ public class ListGui extends GuiScreen {
             if (scrollBar.yPosition + scrollBar.height > super.height) {
                 scrollBar.yPosition = super.height - scrollBar.height;
             }
-            if (listItemButtons.get(0).yPosition > 0 && scrollBar.yPosition != 0) {
+            if (listItemButtons.get(0).yPosition > 0 && (scrollBar.yPosition != 0 && scrollBar.visible)) {
                 listItems();
             }
             if (scrollBar.yPosition < 0) {
@@ -233,9 +233,7 @@ public class ListGui extends GuiScreen {
             listItems();
         } catch (IOException ioException) {
             textFieldSubMessage = RED + ioException.getMessage();
-        } catch (NullPointerException ignored) {
-
-        }
+        } catch (NullPointerException ignored) {}
     }
 
     protected void listItems() {
@@ -248,8 +246,15 @@ public class ListGui extends GuiScreen {
                 ListItemButton listItemButton = new ListItemButton(listItemButtons.size() + 6, element) {
                     @Override
                     public void work() {
-                        selectedItem = selectedItem == this ? null : this;
-                        removeButton.visible = selectedItem != null;
+                        if (this.isSelectedButton) {
+                            this.isSelectedButton = false;
+                            selectedItem = null;
+                            removeButton.visible = false;
+                        } else {
+                            this.isSelectedButton = true;
+                            selectedItem = this;
+                            removeButton.visible = true;
+                        }
                     }
                 };
                 listItemButtons.add(listItemButton);
