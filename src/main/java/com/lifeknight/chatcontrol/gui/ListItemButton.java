@@ -69,5 +69,15 @@ public abstract class ListItemButton extends GuiButton {
     }
 
     @Override
+    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+        if (!super.mousePressed(mc, mouseX, mouseY)) {
+            isSelectedButton = false;
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
     public void playPressSound(SoundHandler soundHandlerIn) {}
 }
