@@ -83,6 +83,12 @@ public class LifeKnightGui extends GuiScreen {
                         ((LifeKnightSlider) guiButton).updateOriginalYPosition();
                     }
                 }
+                for (GuiButton guiButton : LifeKnightGui.super.buttonList) {
+                    if (guiButton instanceof LifeKnightButton && guiButton.displayString.equals(">")) {
+                        guiButton.yPosition += j;
+                        ((LifeKnightButton) guiButton).updateOriginalYPosition();
+                    }
+                }
                 for (LifeKnightTextField lifeKnightTextField : textFields) {
                     lifeKnightTextField.yPosition += j;
                     lifeKnightTextField.updateOriginalYPosition();
@@ -173,7 +179,7 @@ public class LifeKnightGui extends GuiScreen {
                     if (((LifeKnightBoolean) lifeKnightVariable).hasStringList()) {
                         LifeKnightGui copy = this;
                         LifeKnightButton open;
-                        displayedButtons.add(open = new LifeKnightButton(componentId,
+                        super.buttonList.add(open = new LifeKnightButton(componentId,
                                 Utilities.get2ndPanelCenter() + 110,
                                 (10 + (componentId * 30)),
                                 20,
@@ -215,7 +221,7 @@ public class LifeKnightGui extends GuiScreen {
                             return null;
                         }
                     });
-                    displayedButtons.add(new LifeKnightButton(componentId, get2ndPanelCenter() + 110,
+                    super.buttonList.add(new LifeKnightButton(componentId, get2ndPanelCenter() + 110,
                             (10 + ((componentId + 1) * 30)),
                             20,
                             20, ">") {
@@ -282,10 +288,18 @@ public class LifeKnightGui extends GuiScreen {
             @Override
             public void onDrag(int scroll) {
                 scroll = -scroll;
-                int scaledScroll = (int) (scroll * panelHeight / (double) this.height);
+                int scaledScroll = (int) (scroll * panelHeight / (double) LifeKnightGui.super.height);
 
                 Object lastComponent = null;
-                int highestComponentId = displayedButtons.size() + textFields.size() - 2;
+                int highestComponentId;
+
+                if (displayedButtons.size() == 0) {
+                    highestComponentId = Math.max(0, textFields.size() - 1);
+                } else if (textFields.size() == 0) {
+                    highestComponentId = Math.max(0, displayedButtons.size() - 1);
+                } else {
+                    highestComponentId = displayedButtons.size() + textFields.size() - 2;
+                }
 
                 for (GuiButton guiButton : displayedButtons) {
                     if (guiButton.id == highestComponentId) {
@@ -328,6 +342,12 @@ public class LifeKnightGui extends GuiScreen {
                         guiButton.yPosition = ((LifeKnightSlider) guiButton).originalYPosition + scaledScroll;
                     }
                 }
+
+                for (GuiButton guiButton : LifeKnightGui.super.buttonList) {
+                    if (guiButton instanceof LifeKnightButton && guiButton.displayString.equals(">")) {
+                        guiButton.yPosition = ((LifeKnightButton) guiButton).originalYPosition + scaledScroll;
+                    }
+                }
                 for (LifeKnightTextField lifeKnightTextField : textFields) {
                     lifeKnightTextField.yPosition = lifeKnightTextField.originalYPosition + scaledScroll;
                 }
@@ -340,6 +360,11 @@ public class LifeKnightGui extends GuiScreen {
                         ((LifeKnightButton) guiButton).updateOriginalYPosition();
                     } else if (guiButton instanceof LifeKnightSlider) {
                         ((LifeKnightSlider) guiButton).updateOriginalYPosition();
+                    }
+                }
+                for (GuiButton guiButton : LifeKnightGui.super.buttonList) {
+                    if (guiButton instanceof LifeKnightButton && guiButton.displayString.equals(">")) {
+                        ((LifeKnightButton) guiButton).updateOriginalYPosition();
                     }
                 }
                 for (LifeKnightTextField lifeKnightTextField : textFields) {

@@ -86,7 +86,7 @@ public class ChatControlMod {
 	public static final LifeKnightBoolean hideUselessMessages = new LifeKnightBoolean("HideUselessMessages", "Extra", false);
 	public static final ArrayList<Message> hiddenMessages = new ArrayList<>();
 	public static final ArrayList<Message> censoredMessages = new ArrayList<>();
-	public static final Config config = new Config();
+	public static final Configuration configuration = new Configuration();
 
 	@EventHandler
 	public void init(FMLInitializationEvent initEvent) {

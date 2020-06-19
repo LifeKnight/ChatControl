@@ -45,8 +45,8 @@ public class LifeKnightCycle extends LifeKnightVariable {
         if (!(newValue > values.size() - 1)) {
             currentValue = newValue;
         }
-        if (config != null) {
-            config.updateConfigFromVariables();
+        if (configuration != null) {
+            configuration.updateConfigFromVariables();
             onSetCurrentValue();
         }
         return getCurrentValueString();

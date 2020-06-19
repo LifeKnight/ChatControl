@@ -49,20 +49,21 @@ public class ListGui extends GuiScreen {
             scrollBar.height = (int) (super.height * (super.height / (double) panelHeight));
             int j = Mouse.getDWheel() / 7;
             scrollBar.visible = !(scrollBar.height >= super.height);
-                while (j > 0 && listItemButtons.get(0).yPosition + j > 10) {
-                    j--;
-                }
+            while (j > 0 && listItemButtons.get(0).yPosition + j > 10) {
+                j--;
+            }
 
-                while (j < 0 && listItemButtons.get(listItemButtons.size() - 1).yPosition + 30 + j < super.height - 10) {
-                    j++;
-                }
-                for (ListItemButton listItemButton : listItemButtons) {
-                    listItemButton.yPosition += j;
-                }
+            while (j < 0 && listItemButtons.get(listItemButtons.size() - 1).yPosition + 30 + j < super.height - 10) {
+                j++;
+            }
+            for (ListItemButton listItemButton : listItemButtons) {
+                listItemButton.yPosition += j;
+            }
             scrollBar.yPosition = (int) ((super.height * (-listItemButtons.get(0).yPosition - 10) / (double) (panelHeight - super.height)) * ((super.height - scrollBar.height) / (double) super.height)) + 8;
         } else {
             scrollBar.visible = false;
         }
+
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -199,6 +200,14 @@ public class ListGui extends GuiScreen {
         searchField.mouseClicked(mouseX, mouseY, mouseButton);
         addField.mouseClicked(mouseX, mouseY, mouseButton);
         super.mouseClicked(mouseX, mouseY, mouseButton);
+        boolean aButtonHasBeenSelected = false;
+        for (ListItemButton listItemButton : listItemButtons) {
+            if (listItemButton.isSelectedButton) {
+                aButtonHasBeenSelected = true;
+                break;
+            }
+        }
+        removeButton.visible = aButtonHasBeenSelected;
     }
 
     protected void removeSelectedButton() {
@@ -227,11 +236,9 @@ public class ListGui extends GuiScreen {
                         if (this.isSelectedButton) {
                             this.isSelectedButton = false;
                             selectedItem = null;
-                            removeButton.visible = false;
                         } else {
                             this.isSelectedButton = true;
                             selectedItem = this;
-                            removeButton.visible = true;
                         }
                     }
                 };

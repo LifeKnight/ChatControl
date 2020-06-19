@@ -1,6 +1,6 @@
 package com.lifeknight.chatcontrol.variables;
 
-import static com.lifeknight.chatcontrol.mod.ChatControlMod.config;
+import static com.lifeknight.chatcontrol.mod.ChatControlMod.configuration;
 import static com.lifeknight.chatcontrol.mod.ChatControlMod.variables;
 
 public class LifeKnightString extends LifeKnightVariable {
@@ -19,8 +19,8 @@ public class LifeKnightString extends LifeKnightVariable {
 
     public void setValue(String value) {
         this.value = value;
-        if (config != null) {
-            config.updateConfigFromVariables();
+        if (configuration != null) {
+            configuration.updateConfigFromVariables();
             onSetValue();
         }
     }

@@ -1,7 +1,7 @@
 package com.lifeknight.chatcontrol.variables;
 
 
-import static com.lifeknight.chatcontrol.mod.ChatControlMod.config;
+import static com.lifeknight.chatcontrol.mod.ChatControlMod.configuration;
 import static com.lifeknight.chatcontrol.mod.ChatControlMod.variables;
 import static net.minecraft.util.EnumChatFormatting.GREEN;
 import static net.minecraft.util.EnumChatFormatting.RED;
@@ -36,8 +36,8 @@ public class LifeKnightBoolean extends LifeKnightVariable {
 
     public void toggle() {
         value = !value;
-        if (!config.active) {
-            config.updateConfigFromVariables();
+        if (!configuration.active) {
+            configuration.updateConfigFromVariables();
             onSetValue();
         }
     }
@@ -45,8 +45,8 @@ public class LifeKnightBoolean extends LifeKnightVariable {
     public void setValue(boolean newValue) {
         value = newValue;
         //noinspection ConstantConditions
-        if (config != null) {
-            config.updateConfigFromVariables();
+        if (configuration != null) {
+            configuration.updateConfigFromVariables();
             onSetValue();
         }
     }

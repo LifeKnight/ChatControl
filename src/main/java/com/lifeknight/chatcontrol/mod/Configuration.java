@@ -17,11 +17,11 @@ import java.util.Scanner;
 import static com.lifeknight.chatcontrol.mod.ChatControlMod.modID;
 import static com.lifeknight.chatcontrol.mod.ChatControlMod.variables;
 
-public class Config {
+public class Configuration {
 	public boolean active = false;
 	private JsonObject configAsJson = new JsonObject();
 
-	public Config() {
+	public Configuration() {
 		if (configExists()) {
 			updateVariablesFromConfig();
 		}

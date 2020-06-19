@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.lifeknight.chatcontrol.mod.ChatControlMod.config;
+import static com.lifeknight.chatcontrol.mod.ChatControlMod.configuration;
 import static com.lifeknight.chatcontrol.mod.ChatControlMod.variables;
 
 public class LifeKnightStringList extends LifeKnightVariable {
@@ -31,14 +31,14 @@ public class LifeKnightStringList extends LifeKnightVariable {
 
     public void setValue(ArrayList<String> newValue) {
         value = newValue;
-        config.updateConfigFromVariables();
+        configuration.updateConfigFromVariables();
         onSetValue();
     }
 
     public void addElement(String element) throws IOException {
         if (!value.contains(element)) {
             value.add(element);
-            config.updateConfigFromVariables();
+            configuration.updateConfigFromVariables();
             onAddElement();
         } else {
             throw new IOException(name + " already contains " + element + "!");
@@ -48,7 +48,7 @@ public class LifeKnightStringList extends LifeKnightVariable {
     public void removeElement(String element) throws IOException {
         if (value.contains(element)) {
             value.remove(element);
-            config.updateConfigFromVariables();
+            configuration.updateConfigFromVariables();
             onRemoveElement();
         } else {
             throw new IOException(name + " does not contain " + element + "!");
@@ -57,7 +57,7 @@ public class LifeKnightStringList extends LifeKnightVariable {
 
     public void clear() {
         value.clear();
-        config.updateConfigFromVariables();
+        configuration.updateConfigFromVariables();
         onClear();
     }
 
