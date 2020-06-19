@@ -1,31 +1,49 @@
-package com.lifeknight.chatcontrol.gui;
+package com.lifeknight.chatcontrol.gui.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 
-import static com.lifeknight.chatcontrol.utilities.Utils.get2ndPanelCenter;
+import static com.lifeknight.chatcontrol.utilities.Utilities.get2ndPanelCenter;
 
 public abstract class ListItemButton extends GuiButton {
     private final String buttonText;
     public boolean isSelectedButton = false;
+    public int originalYPosition = 0;
 
     public ListItemButton(int componentId, String element) {
         super(componentId, get2ndPanelCenter() - 100,
-                (5 + ((componentId - 6) * 30)),
+                (10 + ((componentId - 6) * 30)),
                 200,
                 20, element);
         this.buttonText = element;
         int j;
-        if ((j = Minecraft.getMinecraft().fontRendererObj.getStringWidth(buttonText) + 30) > super.width) {
-            super.width = j;
+        if ((j = Minecraft.getMinecraft().fontRendererObj.getStringWidth(buttonText) + 30) > this.width) {
+            this.width = j;
             this.xPosition = get2ndPanelCenter() - this.width / 2;
+        }
+        originalYPosition = this.yPosition;
+    }
+
+    @Override
+    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+        if (super.mousePressed(mc, mouseX, mouseY)) {
+            isSelectedButton = true;
+            work();
+            return true;
+        } else {
+            isSelectedButton = false;
+            return false;
         }
     }
 
     public String getButtonText() {
         return buttonText;
+    }
+
+    public void updateOriginalYPosition() {
+        originalYPosition = this.yPosition;
     }
 
     public abstract void work();
@@ -66,16 +84,6 @@ public abstract class ListItemButton extends GuiButton {
 
         drawVerticalLine(left, top, bottom, color);
         drawVerticalLine(right, top, bottom, color);
-    }
-
-    @Override
-    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-        if (!super.mousePressed(mc, mouseX, mouseY)) {
-            isSelectedButton = false;
-            return false;
-        } else {
-            return true;
-        }
     }
 
     @Override

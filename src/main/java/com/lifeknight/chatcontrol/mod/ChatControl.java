@@ -1,6 +1,6 @@
 package com.lifeknight.chatcontrol.mod;
 
-import com.lifeknight.chatcontrol.utilities.Utils;
+import com.lifeknight.chatcontrol.utilities.Utilities;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -111,12 +111,12 @@ public class ChatControl {
 
     public static void processMessage(ClientChatReceivedEvent event) {
         String message = event.message.getFormattedText();
-        String unformattedText = Utils.removeFormattingCodes(message);
+        String unformattedText = Utilities.removeFormattingCodes(message);
 
         if (onHypixel) {
             if (message.contains(":")) {
                 String preMessage = message.substring(0, message.indexOf(":") + 1);
-                if (shouldHideChatType(Utils.removeFormattingCodes(preMessage)) || shouldHideMessage(Utils.removeFormattingCodes(message))) {
+                if (shouldHideChatType(Utilities.removeFormattingCodes(preMessage)) || shouldHideMessage(Utilities.removeFormattingCodes(message))) {
                     event.setCanceled(true);
                     System.out.println("Message hidden by ChatControl: " + event.message.getUnformattedText());
                     hiddenMessages.add(new Message(event.message));
@@ -182,7 +182,7 @@ public class ChatControl {
             return false;
         }
 
-        if (containsPlayer(input, Utils.getUsername())) {
+        if (containsPlayer(input, Utilities.getUsername()) || input.startsWith("To ")) {
             return false;
         }
 
@@ -194,23 +194,7 @@ public class ChatControl {
             return true;
         }
 
-        if (messageIsPartyChat(input) && hidePartyChat.getValue()) {
-            return true;
-        }
-
-        if (messageIsGuildChat(input) && hideGuildChat.getValue()) {
-            return true;
-        }
-
-        if (messageIsShoutChat(input) && hideShoutChat.getValue()) {
-            return true;
-        }
-
-        if (messageIsMessageChat(input) && hideMessageChat.getValue()) {
-            return true;
-        }
-
-        return messageIsAllChat(input) && hideAllChat.getValue();
+        return false;
     }
 
     public static boolean messageIsPartyChat(String input) {
@@ -222,7 +206,7 @@ public class ChatControl {
     }
 
     public static boolean messageIsShoutChat(String input) {
-        return input.startsWith("[SHOUT]");
+        return input.startsWith("[SHOUT] ");
     }
 
     public static boolean messageIsMessageChat(String input) {
@@ -230,13 +214,31 @@ public class ChatControl {
     }
 
     public static boolean messageIsAllChat(String input) {
-        return !messageIsPartyChat(input) && !messageIsGuildChat(input) && !messageIsShoutChat(input) && !messageIsMessageChat(input) && !input.startsWith("To:");
+        return !messageIsPartyChat(input) && !messageIsGuildChat(input) && !messageIsShoutChat(input) && !messageIsMessageChat(input) && !input.startsWith("To ");
     }
 
     public static boolean messageIsNotFromWhitelistedPlayer(String input) {
         if (!chatWhitelist.getValue()) {
             return false;
-        } else return !containsAnyPlayer(input, whitelistedChatPlayers.getValue());
+        }
+
+        if (input.startsWith("To")) {
+            return false;
+        }
+
+        if (!containsAnyPlayer(input, whitelistedChatPlayers.getValue())) {
+            if (messageIsAllChat(input) && hideAllChat.getValue()) return true;
+
+            if (messageIsPartyChat(input) && hidePartyChat.getValue()) return true;
+
+            if (messageIsGuildChat(input) && hideGuildChat.getValue()) return true;
+
+            if (messageIsShoutChat(input) && hideShoutChat.getValue()) return true;
+
+            if (messageIsMessageChat(input) && hideMessageChat.getValue()) return true;
+        }
+
+        return false;
     }
 
     public static boolean messageIsFromBlacklistedPlayer(String input) {
@@ -252,7 +254,7 @@ public class ChatControl {
         if (censorType.getCurrentValue() == 1) {
             return censorVowels(input);
         }
-        return Utils.multiplyString("*", input.length());
+        return Utilities.multiplyString("*", input.length());
     }
 
     public static boolean containsAdvertisement(String input) {
@@ -286,7 +288,7 @@ public class ChatControl {
     public static String censorVowels(String input) {
         char[] asChars = input.toCharArray();
         for (int i = 0; i < input.length(); i++) {
-            if (Utils.isVowel(asChars[i])) {
+            if (Utilities.isVowel(asChars[i])) {
                 asChars[i] = '*';
             }
         }

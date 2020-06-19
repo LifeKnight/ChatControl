@@ -1,6 +1,6 @@
-package com.lifeknight.chatcontrol.gui;
+package com.lifeknight.chatcontrol.gui.components;
 
-import com.lifeknight.chatcontrol.utilities.Utils;
+import com.lifeknight.chatcontrol.utilities.Utilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.Gui;
@@ -9,8 +9,11 @@ import net.minecraft.client.gui.GuiButton;
 public abstract class ScrollBar extends GuiButton {
     public boolean dragging = false;
     public int startY = 0;
+    public int originalMouseYPosition = 0;
+    public int originalYPosition = 0;
+
     public ScrollBar() {
-        super(-1, Utils.width - 7, 0, 5, Utils.height, "");
+        super(-1, Utilities.getGameWidth() - 7, 0, 5, Utilities.getGameHeight(), "");
         this.visible = false;
     }
 
@@ -24,25 +27,35 @@ public abstract class ScrollBar extends GuiButton {
     }
 
     @Override
-    public boolean mousePressed(Minecraft par1Minecraft, int par2, int par3)
-    {
-        if (super.mousePressed(par1Minecraft, par2, par3)) {
-            startY = par3;
+    public boolean mousePressed(Minecraft minecraft, int mouseX, int mouseY) {
+        if (super.mousePressed(minecraft, mouseX, mouseY)) {
+            startY = mouseY;
             dragging = true;
+            originalMouseYPosition = mouseY;
+            originalYPosition = this.yPosition;
+            onMousePress();
             return true;
         } else {
             return false;
         }
     }
 
-    public void mouseReleased(int par1, int par2)
-    {
+    protected abstract void onMousePress();
+
+    public void mouseReleased(int par1, int par2) {
         dragging = false;
     }
 
     @Override
-    public void playPressSound(SoundHandler soundHandlerIn) {}
+    public void playPressSound(SoundHandler soundHandlerIn) {
+    }
 
     @Override
-    public abstract void mouseDragged(Minecraft mc, int mouseX, int mouseY);
+    public void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
+        if (super.visible && this.dragging) {
+            onDrag(mouseY - originalMouseYPosition);
+        }
+    }
+
+    public abstract void onDrag(int scroll);
 }

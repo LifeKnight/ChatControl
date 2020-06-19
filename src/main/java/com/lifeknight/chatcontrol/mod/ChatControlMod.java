@@ -24,7 +24,7 @@ import static com.lifeknight.chatcontrol.mod.ChatControlMod.*;
 @net.minecraftforge.fml.common.Mod(modid = modID, name = modName, version = modVersion, clientSideOnly = true)
 public class ChatControlMod {
 	public static final String modName = "ChatControl",
-			modVersion = "1.0",
+			modVersion = "1.1",
 			modID = "chatcontrol";
 	public static final EnumChatFormatting modColor = EnumChatFormatting.GREEN;
 	public static boolean onHypixel = false, openGui = false;

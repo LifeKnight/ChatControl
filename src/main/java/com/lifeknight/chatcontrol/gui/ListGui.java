@@ -1,8 +1,8 @@
 package com.lifeknight.chatcontrol.gui;
 
-import com.lifeknight.chatcontrol.utilities.Utils;
+import com.lifeknight.chatcontrol.gui.components.*;
+import com.lifeknight.chatcontrol.mod.ChatControlMod;
 import com.lifeknight.chatcontrol.variables.LifeKnightStringList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
@@ -10,14 +10,12 @@ import org.lwjgl.input.Mouse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.lifeknight.chatcontrol.mod.ChatControlMod.config;
-import static com.lifeknight.chatcontrol.mod.ChatControlMod.openGui;
+import static com.lifeknight.chatcontrol.utilities.Utilities.*;
 import static net.minecraft.util.EnumChatFormatting.GRAY;
 import static net.minecraft.util.EnumChatFormatting.RED;
 
 public class ListGui extends GuiScreen {
     private final ArrayList<ListItemButton> listItemButtons = new ArrayList<>();
-    private final ArrayList<LifeKnightButton> lifeKnightButtons = new ArrayList<>();
     private final LifeKnightStringList lifeKnightStringList;
     private ConfirmButton clearButton;
     private ScrollBar scrollBar;
@@ -26,7 +24,6 @@ public class ListGui extends GuiScreen {
     public LifeKnightButton addButton, removeButton;
     private String textFieldSubMessage = "", searchInput = "", listMessage = "";
     public LifeKnightGui lastGui;
-    public int toScroll = 0;
 
     public ListGui(LifeKnightStringList lifeKnightStringList) {
         this.lifeKnightStringList = lifeKnightStringList;
@@ -40,45 +37,29 @@ public class ListGui extends GuiScreen {
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        drawCenteredString(fontRendererObj, listMessage, Utils.get2ndPanelCenter(), super.height / 2, 0xffffffff);
-        drawVerticalLine(Utils.getScaledWidth(300), 0, super.height, 0xffffffff);
+        drawCenteredString(fontRendererObj, listMessage, get2ndPanelCenter(), super.height / 2, 0xffffffff);
+        drawVerticalLine(getScaledWidth(300), 0, super.height, 0xffffffff);
         searchField.drawTextBoxAndName();
         addField.drawTextBoxAndName();
         addField.drawStringBelowBox();
 
         if (listItemButtons.size() != 0) {
-            int panelHeight = listItemButtons.size() * 30 + 20;
+            int panelHeight = listItemButtons.size() * 30;
 
             scrollBar.height = (int) (super.height * (super.height / (double) panelHeight));
             int j = Mouse.getDWheel() / 7;
             scrollBar.visible = !(scrollBar.height >= super.height);
-            if (((j > 0 || toScroll > 0) && listItemButtons.get(0).yPosition < 5) || ((j < 0 || toScroll < 0) && listItemButtons.get(listItemButtons.size() - 1).yPosition + 60 > super.height)) {
-                for (ListItemButton listItemButton: listItemButtons) {
-                    if (toScroll == 0) {
-                        listItemButton.yPosition += j;
-                    } else {
-                        listItemButton.yPosition += Math.ceil(toScroll * ((double) Utils.height / Utils.getSupposedHeight()));
-                    }
+                while (j > 0 && listItemButtons.get(0).yPosition + j > 10) {
+                    j--;
                 }
-                if (toScroll == 0) {
-                    scrollBar.yPosition -= Math.ceil(0.8 * j * ((double) Utils.height / Utils.getSupposedHeight()));
-                } else {
-                    scrollBar.yPosition -= Math.ceil(0.8 * toScroll * ((double) Utils.height / Utils.getSupposedHeight()));
+
+                while (j < 0 && listItemButtons.get(listItemButtons.size() - 1).yPosition + 30 + j < super.height - 10) {
+                    j++;
                 }
-            }
-            toScroll = 0;
-            if (scrollBar.yPosition + scrollBar.height > super.height) {
-                scrollBar.yPosition = super.height - scrollBar.height;
-            }
-            if (listItemButtons.get(0).yPosition > 0 && (scrollBar.yPosition != 0 && scrollBar.visible)) {
-                listItems();
-            }
-            if (scrollBar.yPosition < 0) {
-                scrollBar.yPosition = 0;
-            }
-            if ((listItemButtons.get(listItemButtons.size() - 1).yPosition + j < super.height - 50) || (listItemButtons.get(listItemButtons.size() - 1).yPosition + toScroll < super.height - 50)) {
-                scrollBar.yPosition = super.height - scrollBar.height;
-            }
+                for (ListItemButton listItemButton : listItemButtons) {
+                    listItemButton.yPosition += j;
+                }
+            scrollBar.yPosition = (int) ((super.height * (-listItemButtons.get(0).yPosition - 10) / (double) (panelHeight - super.height)) * ((super.height - scrollBar.height) / (double) super.height)) + 8;
         } else {
             scrollBar.visible = false;
         }
@@ -86,9 +67,7 @@ public class ListGui extends GuiScreen {
     }
 
     public void initGui() {
-        Utils.height = super.height;
-        Utils.width = super.width;
-        searchField = new LifeKnightTextField(0, Utils.getScaledWidth(75), this.height - 40, Utils.getScaledWidth(150), 20, "Search") {
+        searchField = new LifeKnightTextField(0, getScaledWidth(75), this.height - 40, getScaledWidth(150), 20, "Search") {
             @Override
             public String getSubDisplayString() {
                 return null;
@@ -111,7 +90,7 @@ public class ListGui extends GuiScreen {
             }
         };
 
-        addField = new LifeKnightTextField(1, Utils.getScaledWidth(75), Utils.getScaledHeight(115), Utils.getScaledWidth(150), 20, lifeKnightStringList.getName()) {
+        addField = new LifeKnightTextField(1, getScaledWidth(75), getScaledHeight(85), getScaledWidth(150), 20, lifeKnightStringList.getName()) {
             @Override
             public void handleInput() {
                 this.lastInput = this.getText();
@@ -133,7 +112,7 @@ public class ListGui extends GuiScreen {
             }
         };
 
-        super.buttonList.add(addButton = new LifeKnightButton("Add", 2, Utils.getScaledWidth(75), Utils.getScaledHeight(195), Utils.getScaledWidth(150)) {
+        super.buttonList.add(addButton = new LifeKnightButton("Add", 2, getScaledWidth(75), getScaledHeight(165), getScaledWidth(150)) {
             @Override
             public void work() {
                 addField.handleInput();
@@ -141,7 +120,7 @@ public class ListGui extends GuiScreen {
             }
         });
 
-        super.buttonList.add(removeButton = new LifeKnightButton("Remove",3, Utils.getScaledWidth(75), Utils.getScaledHeight(260), Utils.getScaledWidth(150)) {
+        super.buttonList.add(removeButton = new LifeKnightButton("Remove", 3, getScaledWidth(75), getScaledHeight(230), getScaledWidth(150)) {
             @Override
             public void work() {
                 removeSelectedButton();
@@ -149,7 +128,7 @@ public class ListGui extends GuiScreen {
         });
         removeButton.visible = false;
 
-        super.buttonList.add(clearButton = new ConfirmButton(4, Utils.getScaledWidth(75), Utils.getScaledHeight(325), Utils.getScaledWidth(150), "Clear", RED + "Confirm") {
+        super.buttonList.add(clearButton = new ConfirmButton(4, getScaledWidth(75), getScaledHeight(295), getScaledWidth(150), "Clear", RED + "Confirm") {
             @Override
             public void onConfirm() {
                 lifeKnightStringList.clear();
@@ -160,26 +139,36 @@ public class ListGui extends GuiScreen {
 
         super.buttonList.add(scrollBar = new ScrollBar() {
             @Override
-            public void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
-                if (super.visible && this.dragging) {
-                    toScroll = this.startY - mouseY;
-                    this.startY = mouseY;
+            public void onDrag(int scroll) {
+                scroll = -scroll;
+                int scaledScroll = (int) (scroll * (listItemButtons.size() * 30) / (double) ListGui.super.height);
+                while (scaledScroll > 0 && listItemButtons.get(0).originalYPosition + scaledScroll > 10) {
+                    scaledScroll--;
+                }
+                while (scaledScroll < 0 && listItemButtons.get(listItemButtons.size() - 1).originalYPosition + 30 + scaledScroll < ListGui.super.height - 10) {
+                    scaledScroll++;
+                }
+                for (ListItemButton listItemButton : listItemButtons) {
+                    listItemButton.yPosition = listItemButton.originalYPosition + scaledScroll;
+                }
+            }
+
+            @Override
+            public void onMousePress() {
+                for (ListItemButton listItemButton : listItemButtons) {
+                    listItemButton.updateOriginalYPosition();
                 }
             }
         });
 
-        lifeKnightButtons.add(addButton);
-        lifeKnightButtons.add(removeButton);
-        lifeKnightButtons.add(clearButton);
         if (lastGui != null) {
             LifeKnightButton backButton;
-            super.buttonList.add(backButton = new LifeKnightButton("Back", 5, Utils.getScaledHeight(10), Utils.getScaledHeight(10), 50) {
+            super.buttonList.add(backButton = new LifeKnightButton("Back", 5, getScaledHeight(10), getScaledHeight(10), 50) {
                 @Override
                 public void work() {
-                    openGui(lastGui);
+                    ChatControlMod.openGui(lastGui);
                 }
             });
-            lifeKnightButtons.add(backButton);
         }
         listItems();
     }
@@ -190,21 +179,10 @@ public class ListGui extends GuiScreen {
 
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button instanceof ListItemButton) {
-            for (ListItemButton listItemButton: listItemButtons) {
-                if (button == listItemButton) {
-                    listItemButton.work();
-                    break;
-                }
-            }
+            ((ListItemButton) button).work();
         } else if (button instanceof LifeKnightButton) {
-            for (LifeKnightButton lifeKnightButton: lifeKnightButtons) {
-                if (button == lifeKnightButton) {
-                    lifeKnightButton.work();
-                    break;
-                }
-            }
+            ((LifeKnightButton) button).work();
         }
-        config.updateConfigFromVariables();
     }
 
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
@@ -217,8 +195,7 @@ public class ListGui extends GuiScreen {
         }
     }
 
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    {
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         searchField.mouseClicked(mouseX, mouseY, mouseButton);
         addField.mouseClicked(mouseX, mouseY, mouseButton);
         super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -233,15 +210,16 @@ public class ListGui extends GuiScreen {
             listItems();
         } catch (IOException ioException) {
             textFieldSubMessage = RED + ioException.getMessage();
-        } catch (NullPointerException ignored) {}
+        } catch (NullPointerException ignored) {
+
+        }
     }
 
-    protected void listItems() {
+    private void listItems() {
         listItemButtons.clear();
         this.buttonList.removeIf(guiButton -> guiButton instanceof ListItemButton);
-        scrollBar.yPosition = 0;
 
-        for (String element: lifeKnightStringList.getValue()) {
+        for (String element : lifeKnightStringList.getValue()) {
             if (searchInput.isEmpty() || element.toLowerCase().contains(searchInput.toLowerCase())) {
                 ListItemButton listItemButton = new ListItemButton(listItemButtons.size() + 6, element) {
                     @Override

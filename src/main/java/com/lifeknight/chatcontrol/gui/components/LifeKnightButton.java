@@ -1,18 +1,26 @@
-package com.lifeknight.chatcontrol.gui;
+package com.lifeknight.chatcontrol.gui.components;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
-import static com.lifeknight.chatcontrol.utilities.Utils.get2ndPanelCenter;
+import static com.lifeknight.chatcontrol.utilities.Utilities.get2ndPanelCenter;
 
 public abstract class LifeKnightButton extends GuiButton {
-    protected final String buttonText;
+    private final String buttonText;
+    public int originalYPosition = 0;
 
     public LifeKnightButton(int componentId, String buttonText) {
         super(componentId, get2ndPanelCenter() - 100,
-                (20 + componentId * 30),
+                componentId * 30 + 10,
                 200,
                 20, buttonText);
         this.buttonText = buttonText;
+        int j;
+        if ((j = Minecraft.getMinecraft().fontRendererObj.getStringWidth(buttonText) + 30) > this.width) {
+            this.width = j;
+            this.xPosition = get2ndPanelCenter() - this.width / 2;
+        }
+        originalYPosition = this.yPosition;
     }
 
     public LifeKnightButton(int componentId, int x, int y, int width, int height, String buttonText) {
@@ -29,8 +37,17 @@ public abstract class LifeKnightButton extends GuiButton {
         this.buttonText = buttonText;
     }
 
+    public LifeKnightButton(String buttonText) {
+        super(0, 0, 0, 200, 20, buttonText);
+        this.buttonText = buttonText;
+    }
+
     public String getButtonText() {
         return buttonText;
+    }
+
+    public void updateOriginalYPosition() {
+        originalYPosition = this.yPosition;
     }
 
     public abstract void work();

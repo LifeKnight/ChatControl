@@ -1,6 +1,6 @@
 package com.lifeknight.chatcontrol.mod;
 
-import com.lifeknight.chatcontrol.utilities.Utils;
+import com.lifeknight.chatcontrol.utilities.Utilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -15,7 +15,7 @@ public class Message {
 
     public Message(IChatComponent message) {
         this.message = message;
-        time = Utils.getCurrentTime();
+        time = Utilities.getCurrentTime();
     }
 
     public void printMessage() {

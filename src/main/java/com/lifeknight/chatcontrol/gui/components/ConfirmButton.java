@@ -1,5 +1,6 @@
-package com.lifeknight.chatcontrol.gui;
+package com.lifeknight.chatcontrol.gui.components;
 
+import com.lifeknight.chatcontrol.gui.components.LifeKnightButton;
 import net.minecraft.client.Minecraft;
 
 public abstract class ConfirmButton extends LifeKnightButton {

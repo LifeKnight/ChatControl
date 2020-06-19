@@ -2,11 +2,10 @@
   {
     "modid": "chatcontrol",
     "name": "ChatControl",
-    "description": "Allows you to control and filter chat messages, with your own blacklisted words. Also includes the ability to hide join messages, with whitelist, and hiding Hypixel chats like the notorious guild chat.\n\nMore information on how to use this mod and its features here:\n\nVideo: https://youtu.be/oPiPtvjkIM0\n\nText: https://hst.sh/obuzoxowes.sql",
+    "description": "Allows you to control and filter chat messages, with your own blacklisted words. Also includes the ability to hide join messages, with whitelist, and hiding Hypixel chats like the notorious guild chat.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://youtu.be/oPiPtvjkIM0",
-    "updateUrl": "https://lifeknightmods.wixsite.com/lifeknight",
+    "url": "https://docs.google.com/document/d/1EMRoHpqrd3uRofzvGBEOMeaDeffcGuJwlwREnnzBSJs/edit?usp=sharing",
     "authorList": ["LifeKnight"],
     "credits": "PlumberKid35 for the name and custom censors idea.",
     "logoFile": "logo.png"

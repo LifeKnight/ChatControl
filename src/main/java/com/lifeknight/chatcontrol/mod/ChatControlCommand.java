@@ -2,7 +2,7 @@ package com.lifeknight.chatcontrol.mod;
 
 import com.lifeknight.chatcontrol.gui.LifeKnightGui;
 import com.lifeknight.chatcontrol.utilities.Chat;
-import com.lifeknight.chatcontrol.utilities.Utils;
+import com.lifeknight.chatcontrol.utilities.Utilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -43,10 +43,10 @@ public class ChatControlCommand extends CommandBase {
 	public List<String> addTabCompletionOptions(ICommandSender arg0, String[] arg1, BlockPos arg2) {
 
 		if (arg1.length == 1) {
-			return Utils.returnStartingEntries(new ArrayList<>(Arrays.asList(mainCommands)), arg1[0]);
+			return Utilities.returnStartingEntries(new ArrayList<>(Arrays.asList(mainCommands)), arg1[0]);
 		} else if (arg1.length == 2) {
 			 if (arg1[0].equalsIgnoreCase("view")) {
-				return Utils.returnStartingEntries(new ArrayList<>(Arrays.asList(viewCommands)), arg1[1]);
+				return Utilities.returnStartingEntries(new ArrayList<>(Arrays.asList(viewCommands)), arg1[1]);
 			}
 		}
 		return new ArrayList<>(Arrays.asList(mainCommands));

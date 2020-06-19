@@ -1,10 +1,10 @@
-package com.lifeknight.chatcontrol.gui;
+package com.lifeknight.chatcontrol.gui.components;
 
 import com.lifeknight.chatcontrol.variables.LifeKnightString;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 
-import static com.lifeknight.chatcontrol.utilities.Utils.get2ndPanelCenter;
+import static com.lifeknight.chatcontrol.utilities.Utilities.get2ndPanelCenter;
 import static net.minecraft.util.EnumChatFormatting.YELLOW;
 
 public abstract class LifeKnightTextField extends GuiTextField {
@@ -13,6 +13,7 @@ public abstract class LifeKnightTextField extends GuiTextField {
     public String name;
     public LifeKnightString lifeKnightString = null;
     public String lastInput = "";
+    public int originalYPosition = 0;
 
     public LifeKnightTextField(int componentId, int x, int y, int par5Width, int par6Height, String name, LifeKnightString lifeKnightString) {
         this(componentId, x, y, par5Width, par6Height, name);
@@ -31,15 +32,19 @@ public abstract class LifeKnightTextField extends GuiTextField {
 
     public LifeKnightTextField(int componentId, LifeKnightString lifeKnightString) {
         this(componentId, get2ndPanelCenter() - 100,
-                (20 + componentId * 30),
+                componentId * 30 + 10,
                 200,
                 20,
                 lifeKnightString.getName() + ": " + YELLOW + lifeKnightString.getValue(),
                 lifeKnightString);
+        originalYPosition = this.yPosition;
     }
 
     public void drawTextBoxAndName() {
         super.drawTextBox();
+        if (lifeKnightString != null) {
+            name = lifeKnightString.getName() + ": " + YELLOW + lifeKnightString.getValue();
+        }
         super.drawCenteredString(Minecraft.getMinecraft().fontRendererObj, name, this.xPosition + this.width / 2, this.yPosition - 15, 0xffffffff);
     }
 
@@ -55,6 +60,10 @@ public abstract class LifeKnightTextField extends GuiTextField {
             return true;
         }
         return false;
+    }
+
+    public void updateOriginalYPosition() {
+        originalYPosition = this.yPosition;
     }
 
     public abstract void handleInput();
