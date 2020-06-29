@@ -261,11 +261,8 @@ public class ChatControl {
         String result = input;
         if (hideAdvertisementMessages.getValue() && hide.getValue()) {
             String[] advertisements = {"/party join", "/p join", "/guild join", "/g join", "/visit", "/housing", "/play"};
-            for (String advertisement: advertisements) {
+            for (String advertisement : advertisements) {
                 result = result.replaceAll("(?i)" + advertisement, ".");
-                if (censorAdvancedSwears.getValue()) {
-                    result = result.replaceAll("(?i)" + swearToRegex(advertisement), ".");
-                }
             }
             return !result.equals(input);
         }
@@ -296,7 +293,7 @@ public class ChatControl {
     }
 
     public static boolean shouldHideMessage(String input) {
-        return (hide.getValue() && hideSwearMessages.getValue() && !input.equals(processMessageSwears(input))) || containsAdvertisement(input);
+        return !containsPlayer(input, Utilities.getUsername()) && ((hide.getValue() && hideSwearMessages.getValue() && !input.equals(processMessageSwears(input))) || containsAdvertisement(input));
     }
 
     public static boolean shouldHideHypixelMessage(String input) {
